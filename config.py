@@ -1,0 +1,19 @@
+"""Configuración de GreenSight. Los valores de calibración son provisionales."""
+
+PUERTO_SUELO = 0
+PUERTO_LUZ = 2
+PUERTO_LED = 4
+PUERTO_DHT = 7
+TIPO_DHT = 0  # DHT11
+
+VALOR_SUELO_SECO = 800
+VALOR_SUELO_HUMEDO = 300
+
+LUZ_MUY_BAJA = 100
+LUZ_BAJA = 300
+TIEMPO_ACTUALIZACION = 3
+
+BUS_I2C = 1
+LCD_ADDR = 0x3E
+RGB_ADDR = 0x30
+CARACTERES_LCD = 16
