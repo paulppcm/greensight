@@ -1,20 +1,21 @@
 """Lectura de sensores y conversión de sus mediciones."""
 
 import math
-
 import grovepi
-
 import config
 
-
+#funcion para inicializar los sensores 
 def inicializar_sensores():
+    #A0 puerto de sensor del suelo
     grovepi.pinMode(config.PUERTO_SUELO, "INPUT")
+    #A2 puerto de sensor de luz
     grovepi.pinMode(config.PUERTO_LUZ, "INPUT")
     # grovepi.dht configura la lectura digital del DHT11.
 
-
+#funcion para calcular la humedad del suelo en porcentaje
 def calcular_humedad_suelo(valor):
     rango = config.VALOR_SUELO_SECO - config.VALOR_SUELO_HUMEDO
+    #proteccion contra division por cero, si los valores de calibracion son iguales
     if rango == 0:
         raise ValueError("La calibración seca y húmeda debe ser diferente")
     porcentaje = (config.VALOR_SUELO_SECO - valor) * 100 / rango
