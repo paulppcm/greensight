@@ -1,29 +1,58 @@
-"""Manejo del LED. Los futuros actuadores se agregarán en este módulo."""
+"""Manejo de los actuadores físicos de GreenSight."""
 
 import grovepi
 
 import config
 
 
+def _inicializar_salida(puerto):
+    if puerto is not None:
+        grovepi.pinMode(puerto, "OUTPUT")
+
+
+def _escribir_salida(puerto, encendido, nivel_activo=1):
+    if puerto is None:
+        return
+
+    nivel_apagado = 0 if nivel_activo == 1 else 1
+    valor = nivel_activo if encendido else nivel_apagado
+    grovepi.digitalWrite(puerto, valor)
+
+
 def inicializar_actuadores():
-    grovepi.pinMode(config.PUERTO_LED, "OUTPUT")
+    _inicializar_salida(config.PUERTO_LED)
+    _inicializar_salida(config.PUERTO_BOMBA)
+    _inicializar_salida(config.PUERTO_VENTILADOR)
     apagar_todo()
 
 
-def encender_led():
-    grovepi.digitalWrite(config.PUERTO_LED, 1)
-
-
-def apagar_led():
-    grovepi.digitalWrite(config.PUERTO_LED, 0)
-
-
 def controlar_led(encendido):
-    if encendido:
-        encender_led()
-    else:
-        apagar_led()
+    _escribir_salida(config.PUERTO_LED, encendido)
+
+
+def controlar_bomba(encendida):
+    _escribir_salida(
+        config.PUERTO_BOMBA,
+        encendida,
+        config.NIVEL_ACTIVO_BOMBA,
+    )
+
+
+def controlar_ventilador(encendido):
+    _escribir_salida(
+        config.PUERTO_VENTILADOR,
+        encendido,
+        config.NIVEL_ACTIVO_VENTILADOR,
+    )
+
+
+def aplicar_estado(estado):
+    controlar_led(estado["led"])
+    controlar_bomba(estado["bomba"])
+    controlar_ventilador(estado["ventilador"])
 
 
 def apagar_todo():
-    apagar_led()
+    controlar_led(False)
+    controlar_bomba(False)
+    controlar_ventilador(False)
