@@ -52,7 +52,7 @@ class ControlGreenSightTest(unittest.TestCase):
         self.assertFalse(estado["ventilador"])
         self.assertIsNone(estado["restriccion_energia"])
 
-    def test_ventilador_tiene_prioridad_si_ambos_son_necesarios(self):
+    def test_bomba_tiene_prioridad_si_ambos_son_necesarios(self):
         datos = {
             "temperatura": config.TEMPERATURA_MAX + 1,
             "humedad_aire": 50,
@@ -64,11 +64,11 @@ class ControlGreenSightTest(unittest.TestCase):
         estado = control.aplicar_control(datos)
 
         self.assertTrue(estado["led"])
-        self.assertTrue(estado["ventilador"])
-        self.assertFalse(estado["bomba"])
+        self.assertFalse(estado["ventilador"])
+        self.assertTrue(estado["bomba"])
         self.assertEqual(
             estado["restriccion_energia"],
-            "VENTILADOR_PRIORIDAD",
+            "BOMBA_PRIORIDAD",
         )
 
 
