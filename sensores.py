@@ -14,11 +14,11 @@ def inicializar_sensores():
 
 #funcion para calcular la humedad del suelo en porcentaje
 def calcular_humedad_suelo(valor):
-    rango = config.VALOR_SUELO_HUMEDO - config.VALOR_SUELO_SECO
+    rango = config.VALOR_SUELO_SECO - config.VALOR_SUELO_HUMEDO
     #proteccion contra division por cero, si los valores de calibracion son iguales
     if rango == 0:
         raise ValueError("La calibración seca y húmeda debe ser diferente")
-    porcentaje = (valor - config.VALOR_SUELO_SECO) * 100 / rango
+    porcentaje = (config.VALOR_SUELO_SECO - valor) * 100 / rango
     return round(max(0, min(100, porcentaje)), 1)
 
 
