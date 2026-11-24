@@ -64,8 +64,8 @@ def aplicar_restriccion_energia(estado):
     estado["restriccion_energia"] = None
 
     if estado["ventilador"] and estado["bomba"]:
-        estado["bomba"] = False
-        estado["restriccion_energia"] = "VENTILADOR_PRIORIDAD"
+        estado["ventilador"] = False
+        estado["restriccion_energia"] = "BOMBA_PRIORIDAD"
 
     return estado
 
