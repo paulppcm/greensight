@@ -51,8 +51,8 @@ def aplicar_estado(estado):
 
     # Protección física adicional: bomba y ventilador nunca se energizan juntos.
     if estado["ventilador"] and estado["bomba"]:
-        controlar_bomba(False)
-        controlar_ventilador(True)
+        controlar_bomba(True)
+        controlar_ventilador(False)
         return
 
     controlar_bomba(estado["bomba"])
