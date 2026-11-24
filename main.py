@@ -35,7 +35,7 @@ def mostrar_terminal(datos, estado):
     print(f"Ventilador: {texto_estado(estado['ventilador'])}")
     print(f"Bomba: {texto_estado(estado['bomba'])}")
     if estado.get("restriccion_energia") is not None:
-        print("Restricción energía: ventilador con prioridad")
+        print("Restricción energía: bomba con prioridad")
     print("--------------------------")
 
 
