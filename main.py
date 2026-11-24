@@ -1,9 +1,6 @@
 """Punto de entrada y coordinación de GreenSight."""
 
-import re
-import sys
 import time
-from pathlib import Path
 
 import actuadores
 import config
@@ -38,79 +35,6 @@ def mostrar_terminal(datos, estado):
     print(f"Ventilador: {texto_estado(estado['ventilador'])}")
     print(f"Bomba: {texto_estado(estado['bomba'])}")
     print("--------------------------")
-
-
-def tomar_promedio_suelo(cantidad=10, pausa=0.3):
-    lecturas = []
-    for numero in range(1, cantidad + 1):
-        valor = sensores.leer_suelo_raw()
-        lecturas.append(valor)
-        print(f"Muestra {numero}/{cantidad}: {valor}")
-        time.sleep(pausa)
-    return round(sum(lecturas) / len(lecturas))
-
-
-def guardar_calibracion(valor_seco, valor_humedo):
-    ruta = Path(__file__).with_name("config.py")
-    contenido = ruta.read_text(encoding="utf-8")
-
-    contenido = re.sub(
-        r"VALOR_SUELO_SECO\s*=\s*\d+",
-        f"VALOR_SUELO_SECO = {valor_seco}",
-        contenido,
-        count=1,
-    )
-    contenido = re.sub(
-        r"VALOR_SUELO_HUMEDO\s*=\s*\d+",
-        f"VALOR_SUELO_HUMEDO = {valor_humedo}",
-        contenido,
-        count=1,
-    )
-
-    ruta.write_text(contenido, encoding="utf-8")
-
-
-def calibrar_suelo():
-    sensores.inicializar_sensores()
-
-    print("=== CALIBRACION SENSOR DE SUELO ===")
-    print("Se tomarán 10 muestras para cada estado.")
-    print()
-    print("1) Deja el sensor en tierra SECA o fuera de tierra.")
-    input("Presiona ENTER cuando esté listo...")
-    valor_seco = tomar_promedio_suelo()
-
-    print()
-    print(f"Promedio SECO: {valor_seco}")
-    print()
-    print("2) Coloca el sensor en tierra bien HÚMEDA.")
-    print("   No sumerjas la electrónica del sensor.")
-    input("Presiona ENTER cuando esté listo...")
-    valor_humedo = tomar_promedio_suelo()
-
-    print()
-    print(f"Promedio HÚMEDO: {valor_humedo}")
-
-    if valor_seco == valor_humedo:
-        print("ERROR: los valores seco y húmedo resultaron iguales.")
-        print("No se guardó la calibración.")
-        return
-
-    if valor_seco < valor_humedo:
-        print()
-        print("ADVERTENCIA: el valor seco fue menor que el húmedo.")
-        print("La fórmula actual de GreenSight espera SECO > HÚMEDO.")
-        print("Revisa la posición o el tipo de sensor antes de guardar.")
-        return
-
-    guardar_calibracion(valor_seco, valor_humedo)
-
-    print()
-    print("Calibración guardada correctamente en config.py:")
-    print(f"VALOR_SUELO_SECO = {valor_seco}")
-    print(f"VALOR_SUELO_HUMEDO = {valor_humedo}")
-    print()
-    print("Ahora ejecuta nuevamente: python3 main.py")
 
 
 def detener_sistema(error=None):
@@ -164,7 +88,4 @@ def main():
 
 
 if __name__ == "__main__":
-    if "--calibrar-suelo" in sys.argv:
-        calibrar_suelo()
-    else:
-        main()
+    main()
