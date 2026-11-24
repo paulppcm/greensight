@@ -1,5 +1,41 @@
 # greensight
-Proyecto II 
+Proyecto II
+
+## Control automático
+
+GreenSight analiza las lecturas de los sensores y genera tres decisiones:
+
+- luminosidad baja -> encender LED;
+- temperatura alta -> encender ventilador;
+- humedad de suelo baja -> encender bomba.
+
+Los valores iniciales de control están en `config.py`:
+
+- `LUZ_MUY_BAJA`
+- `LUZ_BAJA`
+- `TEMPERATURA_MAX`
+- `HUMEDAD_SUELO_MIN`
+
+Los puertos de bomba y ventilador deben configurarse en:
+
+- `PUERTO_BOMBA`
+- `PUERTO_VENTILADOR`
+
+Mientras esos valores sean `None`, GreenSight calcula y muestra la decisión pero no escribe sobre esos dos puertos. Esto evita activar un puerto físico incorrecto.
+
+Si un relé se activa con nivel LOW, cambiar su valor `NIVEL_ACTIVO_...` de `1` a `0`.
+
+Ejecutar el sistema:
+
+```bash
+python3 main.py
+```
+
+Probar solo la lógica de control, sin hardware:
+
+```bash
+python3 -m unittest test_control.py
+```
 
 ## API local
 
@@ -23,5 +59,7 @@ Consultar desde otro dispositivo conectado a la misma red WiFi:
 - `http://IP_DE_LA_RASPBERRY:8000/docs`
 
 Para conocer la IP de la Raspberry, ejecutar `hostname -I` y usar su dirección WiFi.
-`/estado` informa la decisión de control sin accionar actuadores.
+
+`/estado` informa las decisiones de control sin accionar actuadores.
+
 Detener el servidor con `Ctrl+C`.
