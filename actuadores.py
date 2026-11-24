@@ -48,6 +48,13 @@ def controlar_ventilador(encendido):
 
 def aplicar_estado(estado):
     controlar_led(estado["led"])
+
+    # Protección física adicional: bomba y ventilador nunca se energizan juntos.
+    if estado["ventilador"] and estado["bomba"]:
+        controlar_bomba(False)
+        controlar_ventilador(True)
+        return
+
     controlar_bomba(estado["bomba"])
     controlar_ventilador(estado["ventilador"])
 
