@@ -4,18 +4,18 @@ import math
 import grovepi
 import config
 
-#funcion para inicializar los sensores 
-def inicializar_sensores():
-    #A0 puerto de sensor del suelo
-    grovepi.pinMode(config.PUERTO_SUELO, "INPUT")
-    #A2 puerto de sensor de luz
-    grovepi.pinMode(config.PUERTO_LUZ, "INPUT")
-    # grovepi.dht configura la lectura digital del DHT11.
 
-#funcion para calcular la humedad del suelo en porcentaje
+def inicializar_sensores():
+    grovepi.pinMode(config.PUERTO_SUELO, "INPUT")
+    grovepi.pinMode(config.PUERTO_LUZ, "INPUT")
+
+
+def leer_suelo_raw():
+    return grovepi.analogRead(config.PUERTO_SUELO)
+
+
 def calcular_humedad_suelo(valor):
     rango = config.VALOR_SUELO_SECO - config.VALOR_SUELO_HUMEDO
-    #proteccion contra division por cero, si los valores de calibracion son iguales
     if rango == 0:
         raise ValueError("La calibración seca y húmeda debe ser diferente")
     porcentaje = (config.VALOR_SUELO_SECO - valor) * 100 / rango
@@ -32,13 +32,12 @@ def leer_dht():
             return None, None
         return temperatura, humedad
     except Exception:
-        # Un fallo del DHT no impide leer los demás sensores.
         return None, None
 
 
 def leer_sensores():
     temperatura, humedad_aire = leer_dht()
-    valor_suelo = grovepi.analogRead(config.PUERTO_SUELO)
+    valor_suelo = leer_suelo_raw()
     luz = grovepi.analogRead(config.PUERTO_LUZ)
     humedad_suelo = calcular_humedad_suelo(valor_suelo)
     return {
