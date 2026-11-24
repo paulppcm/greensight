@@ -16,12 +16,13 @@ Los valores iniciales de control están en `config.py`:
 - `TEMPERATURA_MAX`
 - `HUMEDAD_SUELO_MIN`
 
-Los puertos de bomba y ventilador deben configurarse en:
+Conexiones configuradas en GrovePi:
 
-- `PUERTO_BOMBA`
-- `PUERTO_VENTILADOR`
+- bomba de agua / relé -> D2 (`PUERTO_BOMBA = 2`)
+- ventilador / módulo de control -> D3 (`PUERTO_VENTILADOR = 3`)
+- LED -> D4
+- DHT11 -> D7
 
-Mientras esos valores sean `None`, GreenSight calcula y muestra la decisión pero no escribe sobre esos dos puertos. Esto evita activar un puerto físico incorrecto.
 
 Si un relé se activa con nivel LOW, cambiar su valor `NIVEL_ACTIVO_...` de `1` a `0`.
 
