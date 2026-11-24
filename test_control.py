@@ -37,7 +37,22 @@ class ControlGreenSightTest(unittest.TestCase):
         self.assertFalse(estado["bomba"])
         self.assertEqual(estado["estado_suelo"], "NORMAL")
 
-    def test_aplicar_control_reune_todas_las_decisiones(self):
+    def test_bomba_funciona_si_no_se_necesita_ventilador(self):
+        datos = {
+            "temperatura": config.TEMPERATURA_MAX - 1,
+            "humedad_aire": 50,
+            "valor_suelo": 700,
+            "humedad_suelo": config.HUMEDAD_SUELO_MIN - 1,
+            "luz": config.LUZ_BAJA + 1,
+        }
+
+        estado = control.aplicar_control(datos)
+
+        self.assertTrue(estado["bomba"])
+        self.assertFalse(estado["ventilador"])
+        self.assertIsNone(estado["restriccion_energia"])
+
+    def test_ventilador_tiene_prioridad_si_ambos_son_necesarios(self):
         datos = {
             "temperatura": config.TEMPERATURA_MAX + 1,
             "humedad_aire": 50,
@@ -50,7 +65,11 @@ class ControlGreenSightTest(unittest.TestCase):
 
         self.assertTrue(estado["led"])
         self.assertTrue(estado["ventilador"])
-        self.assertTrue(estado["bomba"])
+        self.assertFalse(estado["bomba"])
+        self.assertEqual(
+            estado["restriccion_energia"],
+            "VENTILADOR_PRIORIDAD",
+        )
 
 
 if __name__ == "__main__":
