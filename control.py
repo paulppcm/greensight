@@ -60,9 +60,19 @@ def controlar_humedad_suelo(humedad_suelo):
     }
 
 
+def aplicar_restriccion_energia(estado):
+    estado["restriccion_energia"] = None
+
+    if estado["ventilador"] and estado["bomba"]:
+        estado["bomba"] = False
+        estado["restriccion_energia"] = "VENTILADOR_PRIORIDAD"
+
+    return estado
+
+
 def aplicar_control(datos):
     estado = {}
     estado.update(controlar_luz(datos["luz"]))
     estado.update(controlar_temperatura(datos["temperatura"]))
     estado.update(controlar_humedad_suelo(datos["humedad_suelo"]))
-    return estado
+    return aplicar_restriccion_energia(estado)
