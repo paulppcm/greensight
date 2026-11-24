@@ -6,9 +6,8 @@ PUERTO_LED = 4
 PUERTO_DHT = 7
 TIPO_DHT = 0  # DHT11
 
-# Configurar estos puertos cuando bomba y ventilador estén conectados al GrovePi.
-PUERTO_BOMBA = None
-PUERTO_VENTILADOR = None
+PUERTO_BOMBA = 2
+PUERTO_VENTILADOR = 3
 
 # 1 significa que el actuador se enciende escribiendo HIGH.
 # Cambiar a 0 si el módulo relé utilizado trabaja con lógica activa en LOW.
