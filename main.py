@@ -9,16 +9,19 @@ import lcd
 import sensores
 
 
+def texto_estado(encendido):
+    return "ENCENDIDO" if encendido else "APAGADO"
+
+
 def mostrar_terminal(datos, estado):
     temperatura = datos["temperatura"]
     humedad = datos["humedad_aire"]
+
     if temperatura is None:
         temperatura = "N/D"
     if humedad is None:
         humedad = "N/D"
-    texto_led = "APAGADO"
-    if estado["led"]:
-        texto_led = "ENCENDIDO"
+
     print("------- GreenSight -------")
     print(f"Temperatura: {temperatura} C")
     print(f"Humedad ambiente: {humedad} %")
@@ -26,7 +29,11 @@ def mostrar_terminal(datos, estado):
     print(f"Humedad suelo: {datos['humedad_suelo']} %")
     print(f"Nivel de luz: {datos['luz']}")
     print(f"Estado luz: {estado['estado_luz']}")
-    print(f"LED: {texto_led}")
+    print(f"Estado temperatura: {estado['estado_temperatura']}")
+    print(f"Estado suelo: {estado['estado_suelo']}")
+    print(f"LED: {texto_estado(estado['led'])}")
+    print(f"Ventilador: {texto_estado(estado['ventilador'])}")
+    print(f"Bomba: {texto_estado(estado['bomba'])}")
     print("--------------------------")
 
 
@@ -66,7 +73,7 @@ def main():
         while True:
             datos = sensores.leer_sensores()
             estado = control.aplicar_control(datos)
-            actuadores.controlar_led(estado["led"])
+            actuadores.aplicar_estado(estado)
             lcd.mostrar_estado(datos, estado, pantalla)
             mostrar_terminal(datos, estado)
             pantalla = (pantalla + 1) % 3
